@@ -1,0 +1,57 @@
+class camera:
+成员变量:
+	1.内参：float   fx_, fy_, cx_, cy_;
+	2.畸变参数：cv::Mat mDistCoef;
+成员函数：
+	1.Camera();//构造函数，从配置文件中读取相机参数
+	2.Vector3d world2camera( const Vector3d& p_w, const SE3& T_c_w );
+        3.Vector3d camera2world( const Vector3d& p_c, const SE3& T_c_w );
+        4.Vector2d camera2pixel( const Vector3d& p_c );
+        5.Vector3d pixel2camera( const Vector2d& p_p, double depth=1 );
+        6.Vector3d pixel2world ( const Vector2d& p_p, const SE3& T_c_w, double depth=1 );
+        7.Vector2d world2pixel ( const Vector3d& p_w, const SE3& T_c_w );
+//成员函数中定义了坐标系之间的转换，其中world是夹板坐标系
+
+class Frame:
+成员变量：
+	1.每一帧的id:unsigned long  id_
+	2.时间戳：double time_stamp_
+	3.当前帧的位姿：SE3 T_c_w_
+	4.使用的相机模型：Camera::Ptr  camera_
+	5.图像：Mat color_
+成员函数：
+	1.static Frame::Ptr createFrame();//新建一个帧
+        2.Vector3d getCamCenter() const;//获取相机光心在world坐标系下位置
+        3.void setPose( const SE3& T_c_w );//计算出pose后给T_c_w_赋值
+
+class Config//从yaml配置文件中读取参数
+成员变量：
+	1.cv::FileStorage file_//opencv中定义的一个类它可以读取一个 YAML文件，且可以访问其中任意一个字段
+成员函数：
+	1. static void setParameterFile( const std::string& filename );//读取YAML文件
+        2.template< typename T >
+          static T get( const std::string& key )//由于参数实质值可能为整数、浮点数或字符串，所以我们通过一个模板函数 get，来获得任意类型的参数值
+
+class Feature//特征的检测和直线检测
+成员变量：
+	1._lines_//直线
+	2._corners//角点
+成员函数：
+	1.GetCrossPoint();//交点检测
+        2.int GetNp();//获取交点数量
+        3.int GetNl()//获取直线数量
+
+class PointMatch//特征点匹配和位姿计算
+成员变量：
+	1.vector<cv::KeyPoint>    keypoints_curr_;    // 当前帧的特征点
+        2.Mat                     descriptors_curr_;  // 当前帧的描述子
+        3.Mat                     descriptors_ref_;   // 前一帧的描述子
+        4.vector<cv::DMatch>      feature_matches_;   // 匹配结果
+        6.Frame::Ptr  		  ref_;       	      // 前一帧
+        7.Frame::Ptr  		  curr_;      	      // 当前帧
+        8.vector< Point3f >       pts_3d_;            // 和当前帧匹配的3D点
+        9.Camera::Ptr             camera_;	      // 相机模型，用来提供相机参数
+成员函数：
+	1.void pose_estimation_3d2d ( std::vector< DMatch > matches,Mat& R, Mat& t );	//计算位姿
+	2.bool addFrame( Frame::Ptr frame );      // 函数中实现程序的主要功能，特征匹配和位姿计算
+	3.void bundleAdjustment (const vector< Point3f > points_3d,const vector< Point2f > points_2d,const Mat& K,Mat& R, Mat& t );//使用G2O优化PNP的计算结果

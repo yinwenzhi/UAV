@@ -1,0 +1,43 @@
+%YAML:1.0
+# data
+# the tum dataset directory, change it to yours! 
+
+#first frame修改为自己的路径
+# dataset_first: /home/guan/visual_navigation/200914/UAV-project/dataset/dataset/20.JPG
+dataset_first: /home/emast/WorkSpace/programe/20200918UAV-project.tar(2)/UAV-project/dataset/dataset/20.JPG
+#image stream 
+dataset_images: /home/emast/WorkSpace/programe/20200918UAV-project.tar(2)/UAV-project/dataset/dataset
+#3d points
+dataset_3d: /home/emast/WorkSpace/programe/20200918UAV-project.tar(2)/UAV-project/dataset/point2.txt
+# camera intrinsics
+
+# 12mm
+Camera.fx: 5059.9
+Camera.fy: 5055.1
+Camera.cx: 599.1741
+Camera.cy: 396.5086
+
+# 12-36mm
+#Camera.fx: 4954.2
+#Camera.fy: 4960.3
+#Camera.cx: 656.9064
+#Camera.cy: 515.7774
+
+# fr2
+#camera.fx: 520.9
+#camera.fy: 521.0
+#camera.cx: 325.1
+#camera.cy: 249.7
+
+
+# VO Parameters
+#number_of_features: 800
+#scale_factor: 1.2
+#level_pyramid: 4
+#match_ratio: 2.0
+#max_num_lost: 10
+#min_inliers: 10
+#keyframe_rotation: 0.1
+#keyframe_translation: 0.1
+#map_point_erase_ratio: 0.5
+
