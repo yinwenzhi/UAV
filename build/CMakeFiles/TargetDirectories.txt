@@ -1,4 +1,0 @@
-/home/emast/WorkSpace/programe/20200918UAV-project.tar(2)/UAV-project/build/CMakeFiles/rebuild_cache.dir
-/home/emast/WorkSpace/programe/20200918UAV-project.tar(2)/UAV-project/build/CMakeFiles/UAV_PROJECT.dir
-/home/emast/WorkSpace/programe/20200918UAV-project.tar(2)/UAV-project/build/CMakeFiles/edit_cache.dir
-/home/emast/WorkSpace/programe/20200918UAV-project.tar(2)/UAV-project/build/CMakeFiles/uav.dir
