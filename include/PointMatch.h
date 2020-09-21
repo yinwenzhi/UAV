@@ -41,10 +41,12 @@ namespace myslam
         Frame::Ptr  ref_;       // reference key-frame
         Frame::Ptr  curr_;      // current frame
         vector< Point3f >              pts_3d_;
+        map<int,Point3f>               pts_3d_ref_map_;
         Camera::Ptr                    camera_;
         Eigen::Isometry3d             T_esti;
         Vec3f                          angle_;
         Vector3d                          translation_;
+        
     public:
         bool addFrame( Frame::Ptr frame );      // add a new frame
         void computeDescriptors();

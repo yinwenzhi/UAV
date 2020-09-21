@@ -19,7 +19,8 @@ public:
     SE3                            T_c_w_;      // transform from world to camera
     Camera::Ptr                    camera_;     // Pinhole RGBD Camera model
     Mat                            color_; // color and depth image
-    vector< Point3f >              pts_3d_ref_;
+    vector< Point3f >              pts_3d_;
+    map<int,Point3f>               pts_3d_ref_;
     // std::vector<cv::KeyPoint>      keypoints_;  // key points in image
     // std::vector<MapPoint*>         map_points_; // associated map points
     //bool                           is_key_frame_;  // whether a key-frame

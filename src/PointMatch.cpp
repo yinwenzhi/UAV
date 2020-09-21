@@ -164,17 +164,30 @@ namespace myslam
             feature_matches_ = matches_ransac;
         }
 
-        //计算当前帧位姿
-        Mat R,t;
-        if( !pose_estimation_3d2d(feature_matches_,R, t ) ){
-            return false;
-        }
+
 
         //筛选匹配到的当前帧的特征点和描述子，并将当前帧设为参考帧
-        Mat desp_tem;
-        // vector<cv::KeyPoint> kp_temp;
-        vector< Point3f >  temp_3d=pts_3d_;
+        // 使用已知3D点的序号来进行提取feature_matches_
+        vector<cv::DMatch> good_matchs;
+
         // pts_3d_.clear();
+        std::map<int,cv::Point3f>::iterator it=pts_3d_ref_map_.begin();
+
+        int matchindex = 0; 
+        // 对每一个匹配对判断 是不是 3d点序列的一个序号
+        while(matchindex<feature_matches_.size() && it!=pts_3d_ref_map_.end()){
+            // cout <<"queryIdx:"<<feature_matches_[matchindex].queryIdx<<"    cur3d->first: " << it->first  << endl;
+            if(feature_matches_[matchindex].queryIdx < it->first) matchindex++;
+            else if (feature_matches_[matchindex].queryIdx > it->first) it++;
+            else {
+                good_matchs.push_back(feature_matches_[matchindex]);
+                matchindex++;
+                it++;
+            }
+            // cout << " feature_matches_[matchindex].queryIdx: " << feature_matches_[matchindex].queryIdx;
+        }
+        feature_matches_ = good_matchs;
+        cout<<"matches.size() after 3d= "<<feature_matches_.size()<<endl;
         // for ( size_t i=0; i<keypoints_curr_.size(); i++ )
         // {
         //     for (size_t m = 0; m < feature_matches_.size(); m++)
@@ -194,6 +207,13 @@ namespace myslam
         //         }
         //     }
         // }
+        
+        // mcurr_-> feature_matches_ = feature_matches_;
+        //计算当前帧位姿
+        Mat R,t;
+        if( !pose_estimation_3d2d(feature_matches_,R, t ) ){
+            return false;
+        }
         
         descriptors_curr_.release();
         //keypoints_curr_.clear();

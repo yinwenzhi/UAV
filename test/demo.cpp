@@ -106,7 +106,8 @@ int main( int argc, char** argv)
                 p_world.x=xx;
                 p_world.y=yy;
                 p_world.z=zz;
-                pF_ini->pts_3d_ref_.push_back(p_world);
+                pF_ini->pts_3d_.push_back(p_world);
+                pF_ini->pts_3d_ref_[num] = p_world;
                 keypoints.push_back(keypoints1[i]);
                 descriptors.push_back(descriptors_1.row(i).clone());
             }
@@ -116,9 +117,10 @@ int main( int argc, char** argv)
             }
         }
     }
-    vo->keypoints_ref_ = keypoints;
-    vo->pts_3d_=pF_ini->pts_3d_ref_;
-    vo->descriptors_ref_=descriptors;
+    vo->keypoints_ref_ = keypoints1;
+    vo->pts_3d_=pF_ini->pts_3d_;
+    vo->pts_3d_ref_map_ = pF_ini->pts_3d_ref_;
+    vo->descriptors_ref_=descriptors_1;
     vo->ref_=pF_ini;
     vo->camera_=camera;
     int k=0;
@@ -230,9 +232,9 @@ int main( int argc, char** argv)
         }
         // imshow("当前帧",img2);
         cv::Mat img_goodmatch;
-        drawMatches ( 
+        drawMatches( 
             vo->ref_->color_, 
-            keypoints,   // 因为匹配使用描述子是给定3D点的描述子，所以关键点也是3D点
+            keypoints1,   // 因为匹配使用描述子是给定3D点的描述子，所以关键点也是3D点
             img2, 
             vo->keypoints_curr_, 
             vo->feature_matches_, 
